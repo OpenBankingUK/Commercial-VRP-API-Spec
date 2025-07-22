@@ -1087,6 +1087,7 @@ components:
         - PSUAuthenticationMethods
         - MaximumIndividualAmount
         - PeriodicLimits
+        - PSUInteractionTypes
       properties:
         ValidFromDateTime:
           type: string

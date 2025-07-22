@@ -1576,7 +1576,8 @@
           "VRPType",
           "PSUAuthenticationMethods",
           "MaximumIndividualAmount",
-          "PeriodicLimits"
+          "PeriodicLimits",
+          "PSUInteractionTypes"
         ],
         "properties": {
           "ValidFromDateTime": {
