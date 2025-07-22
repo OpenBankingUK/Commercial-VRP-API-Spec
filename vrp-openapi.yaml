@@ -998,6 +998,7 @@ components:
             - StatusUpdateDateTime
             - ControlParameters
             - Initiation
+            - StatusReason
           properties:
             ReadRefundAccount:
               type: string
@@ -1337,6 +1338,7 @@ components:
             - StatusUpdateDateTime
             - Initiation
             - Instruction
+            - StatusReason
           description: >
             `Data.Refund` only included in the response if
             `Data.ReadRefundAccount` is set to `Yes` in the consent.
@@ -1478,6 +1480,7 @@ components:
                     type: object
                     required:
                       - Status
+                      - StatusReason
                     properties:
                       LocalInstrument:
                         $ref: '#/components/schemas/OBInternalLocalInstrument1Code'
@@ -2469,6 +2472,8 @@ components:
             $ref: '#/components/schemas/OBStructuredRegulatoryReporting3'
     OBStatusReason:
       type: object
+      required:
+        - StatusReasonCode
       properties:
         StatusReasonCode:
           type: string

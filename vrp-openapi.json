@@ -1461,7 +1461,8 @@
               "Status",
               "StatusUpdateDateTime",
               "ControlParameters",
-              "Initiation"
+              "Initiation",
+              "StatusReason"
             ],
             "properties": {
               "ReadRefundAccount": {
@@ -1864,7 +1865,8 @@
               "Status",
               "StatusUpdateDateTime",
               "Initiation",
-              "Instruction"
+              "Instruction",
+              "StatusReason"
             ],
             "description": "`Data.Refund` only included in the response if `Data.ReadRefundAccount` is set to `Yes` in the consent.\n",
             "properties": {
@@ -2025,7 +2027,8 @@
                     "StatusDetail": {
                       "type": "object",
                       "required": [
-                        "Status"
+                        "Status",
+                        "StatusReason"
                       ],
                       "properties": {
                         "LocalInstrument": {
@@ -3090,6 +3093,9 @@
       },
       "OBStatusReason": {
         "type": "object",
+        "required": [
+          "StatusReasonCode"
+        ],
         "properties": {
           "StatusReasonCode": {
             "type": "string",
