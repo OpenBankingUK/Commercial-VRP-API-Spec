@@ -1798,6 +1798,7 @@
             "required": [
               "ConsentId",
               "PSUAuthenticationMethod",
+              "PSUInteractionType",
               "VRPType",
               "Initiation",
               "Instruction"
