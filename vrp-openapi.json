@@ -3245,7 +3245,10 @@
         "type": "string",
         "x-namespaced-enum": [
           "UK.OBIE.VRPType.Sweeping",
-          "UK.OBIE.VRPType.Other"
+          "UK.OBIE.VRPType.Other",
+          "UK.OBIE.VRPType.CVRP1",
+          "UK.OBIE.VRPType.CVRP2",
+          "UK.OBIE.VRPType.CVRP3"
         ]
       },
       "OBVRPAuthenticationMethods": {
