@@ -2,8 +2,8 @@ openapi: 3.0.0
 servers:
   - url: /open-banking/v4.0/pisp
 info:
-  title: OBL VRP Profile
-  description: VRP OpenAPI Specification
+  title: Commercial VRP (cVRP) Profile
+  description: Commercial VRP (cVRP) OpenAPI Specification
   version: 4.0.0
   termsOfService: https://www.openbanking.org.uk/terms
   contact:
