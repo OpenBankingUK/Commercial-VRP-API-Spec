@@ -3271,6 +3271,16 @@
       "OBRisk1": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "PaymentContextCode",
+          "MerchantCategoryCode",
+          "MerchantCustomerIdentification",
+          "ContractPresentIndicator",
+          "BeneficiaryPrepopulatedIndicator",
+          "PaymentPurposeCode",
+          "CategoryPurposeCode",
+          "BeneficiaryAccountType"
+        ],
         "properties": {
           "PaymentContextCode": {
             "type": "string",
