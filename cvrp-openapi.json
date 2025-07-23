@@ -1893,7 +1893,6 @@
                 "enum": [
                   "RCVD",
                   "RJCT",
-                  "CANC",
                   "PDNG",
                   "ACTC",
                   "ACCP",
@@ -2006,7 +2005,6 @@
                       "enum": [
                         "RCVD",
                         "RJCT",
-                        "CANC",
                         "PDNG",
                         "ACTC",
                         "ACCP",
