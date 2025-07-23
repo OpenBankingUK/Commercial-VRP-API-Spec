@@ -5,7 +5,7 @@
 1. Title and Description metadata.  
     These now reflect that this is the cVRP spec.
 2. `VRPType` values updated.  
-    `UK.OBIE.VRPType.CVRP1`, `UK.OBIE.VRPType.CVRP2` and `UK.OBIE.VRPType.CRVP3` added to `VRPType` enum list.
+    `UK.OBIE.VRPType.CVRP1`, `UK.OBIE.VRPType.CVRP2` and `UK.OBIE.VRPType.CVRP3` added to `VRPType` enum list.
 3. `InSession`/`OffSession` now a mandatory value.  
     `PSUInteractionTypes` in the consent payload and `PSUInteractionType` in the payment submission are now mandatory.
 4. Risk TRI fields now mandatory.  
