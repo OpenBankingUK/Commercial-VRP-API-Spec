@@ -1368,7 +1368,6 @@ components:
               enum:
                 - RCVD
                 - RJCT
-                - CANC
                 - PDNG
                 - ACTC
                 - ACCP
@@ -1460,7 +1459,6 @@ components:
                     enum:
                       - RCVD
                       - RJCT
-                      - CANC
                       - PDNG
                       - ACTC
                       - ACCP
