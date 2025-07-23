@@ -7,7 +7,7 @@
 2. `VRPType` values updated.  
     `UK.OBIE.VRPType.CRVP1`, `UK.OBIE.VRPType.CRVP2` and `UK.OBIE.VRPType.CRVP3` added to `VRPType` enum list.
 3. `InSession`/`OffSession` now a mandatory value.  
-    `OBVRPInteractionTypes` in the consent payload and `OBVRPInteractionType` in the payment submission are now mandatory.
+    `PSUInteractionTypes` in the consent payload and `PSUInteractionType` in the payment submission are now mandatory.
 4. Risk TRI fields now mandatory.  
     The following fields are now mandatory:  
         *`PaymentContextCode`  
