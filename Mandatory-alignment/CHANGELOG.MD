@@ -1,4 +1,4 @@
-# Changelog for cVRP API spec
+# Changelog for cVRP API spec - Alignment to MLA via mandatory fields
 
 ## Changes
 
