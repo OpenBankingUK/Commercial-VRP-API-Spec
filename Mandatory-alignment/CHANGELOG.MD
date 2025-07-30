@@ -17,9 +17,8 @@
         *`BeneficiaryPrepopulatedIndicator`  
         *`PaymentPurposeCode`  
         *`CategoryPurposeCode`  
-        *`BeneficiaryAccountType`  
 
-    Pease note, `DeliveryAddress` remains a conditional field
+    Pease note, `DeliveryAddress` and `BeneficiaryAccountType` remain conditional fields
 5. Fixed VRP PATCH operation description.  
     The description was appearing in the format field and has been moved to the correct description field (note this will be included in the OBL v4.0 Swagger Update 5)
 6. `StatusReason` and `StatusReason\StatusReasonCode` now mandatory fields.  

@@ -2653,7 +2653,6 @@ components:
         - BeneficiaryPrepopulatedIndicator
         - PaymentPurposeCode
         - CategoryPurposeCode
-        - BeneficiaryAccountType
       properties:
         PaymentContextCode:
           type: string

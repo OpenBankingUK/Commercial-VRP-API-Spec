@@ -49,7 +49,6 @@ Description: Status of a transfer, as assigned by the transaction administrator.
 Values:
  - RCVD
  - RJCT
- - CANC
  - PDNG
  - ACTC
  - ACCP
