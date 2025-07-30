@@ -1941,7 +1941,7 @@ Values:
  - Premier
  - Wealth
 </title>
-BeneficiaryAccountType [1..1]
+BeneficiaryAccountType [0..1]
 </text>
 
 <text x="24em" y="233.40000000000003em" fill="darkslateblue">

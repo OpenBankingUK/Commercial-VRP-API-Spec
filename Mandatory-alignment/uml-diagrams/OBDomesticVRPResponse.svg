@@ -82,7 +82,6 @@ Description: Specifies the status of the payment information group. For a full l
 Values:
  - RCVD
  - RJCT
- - CANC
  - PDNG
  - ACTC
  - ACCP
@@ -2321,7 +2320,7 @@ Values:
  - Premier
  - Wealth
 </title>
-BeneficiaryAccountType [1..1]
+BeneficiaryAccountType [0..1]
 </text>
 
 <text x="24.8em" y="280.8em" fill="darkslateblue">
