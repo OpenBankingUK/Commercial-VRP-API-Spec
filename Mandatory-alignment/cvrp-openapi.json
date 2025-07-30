@@ -3281,8 +3281,7 @@
           "ContractPresentIndicator",
           "BeneficiaryPrepopulatedIndicator",
           "PaymentPurposeCode",
-          "CategoryPurposeCode",
-          "BeneficiaryAccountType"
+          "CategoryPurposeCode"
         ],
         "properties": {
           "PaymentContextCode": {
