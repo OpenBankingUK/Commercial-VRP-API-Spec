@@ -19,8 +19,9 @@
         *`CategoryPurposeCode`  
 
     Pease note, `DeliveryAddress` and `BeneficiaryAccountType` remain conditional fields
-5. Fixed VRP PATCH operation description.  
-    The description was appearing in the format field and has been moved to the correct description field (note this will be included in the OBL v4.0 Swagger Update 5)
+5. Fixed VRP PATCH operation description and schema definition to align to [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902).  
+    The description was appearing in the format field and has been moved to the correct description field. Additonally the request body schemea has been updated to fully reflect [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902).  
+    Note: this will be included in the OBL v4.0 Swagger Update 5.
 6. `StatusReason` and `StatusReason\StatusReasonCode` now mandatory fields.  
     This impacts the consent, payment initiation and payment-details endpoints.
 7. Removed `CANC` from payment `Status` enum list.  
