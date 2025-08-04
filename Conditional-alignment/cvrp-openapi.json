@@ -413,11 +413,43 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "type": "string"
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "op",
+                    "path"
+                  ],
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "description": "The operation to perform",
+                      "enum": [
+                        "add",
+                        "remove",
+                        "replace",
+                        "move",
+                        "copy",
+                        "test"
+                      ]
+                    },
+                    "path": {
+                      "type": "string",
+                      "description": "The path to the element to operate on"
+                    },
+                    "from": {
+                      "type": "string",
+                      "description": "The path to move or copy from"
+                    },
+                    "value": {
+                      "description": "The value to add, replace, or test against"
+                    }
+                  }
+                }
               }
             }
           },
-          "description": "Array of Patch Operations",
+          "description": "Array of Patch Operations as defined in [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902)",
           "required": true
         },
         "security": [
