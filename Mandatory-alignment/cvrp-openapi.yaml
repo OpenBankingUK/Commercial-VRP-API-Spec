@@ -260,7 +260,6 @@ paths:
                     description: The path to move or copy from as per [RFC 6901](https://datatracker.ietf.org/doc/html/rfc6901)
                   value:
                     description: The value to add, replace, or test against. This may be a single string or an array of strings
-                additionalProperties: false
         description: Array of Patch Operations as defined in [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902)
         required: true
       security:
@@ -1023,6 +1022,7 @@ components:
             - StatusUpdateDateTime
             - ControlParameters
             - Initiation
+            - StatusReason
           properties:
             ReadRefundAccount:
               type: string
@@ -1111,6 +1111,7 @@ components:
         - PSUAuthenticationMethods
         - MaximumIndividualAmount
         - PeriodicLimits
+        - PSUInteractionTypes
       properties:
         ValidFromDateTime:
           type: string
@@ -1313,6 +1314,7 @@ components:
           required:
             - ConsentId
             - PSUAuthenticationMethod
+            - PSUInteractionType
             - VRPType
             - Initiation
             - Instruction
@@ -1360,6 +1362,7 @@ components:
             - StatusUpdateDateTime
             - Initiation
             - Instruction
+            - StatusReason
           description: >
             `Data.Refund` only included in the response if
             `Data.ReadRefundAccount` is set to `Yes` in the consent.
@@ -1499,6 +1502,7 @@ components:
                     type: object
                     required:
                       - Status
+                      - StatusReason
                     properties:
                       LocalInstrument:
                         $ref: '#/components/schemas/OBInternalLocalInstrument1Code'
@@ -2490,6 +2494,8 @@ components:
             $ref: '#/components/schemas/OBStructuredRegulatoryReporting3'
     OBStatusReason:
       type: object
+      required:
+        - StatusReasonCode
       properties:
         StatusReasonCode:
           type: string
@@ -2663,6 +2669,14 @@ components:
     OBRisk1:
       type: object
       additionalProperties: false
+      required:
+        - PaymentContextCode
+        - MerchantCategoryCode
+        - MerchantCustomerIdentification
+        - ContractPresentIndicator
+        - BeneficiaryPrepopulatedIndicator
+        - PaymentPurposeCode
+        - CategoryPurposeCode
       properties:
         PaymentContextCode:
           type: string
