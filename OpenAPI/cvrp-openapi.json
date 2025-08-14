@@ -444,7 +444,8 @@
                     "value": {
                       "description": "The value to add, replace, or test against. This may be a single string or an array of strings"
                     }
-                  }
+                  },
+                  "additionalProperties": false
                 }
               }
             }
@@ -1493,8 +1494,7 @@
               "Status",
               "StatusUpdateDateTime",
               "ControlParameters",
-              "Initiation",
-              "StatusReason"
+              "Initiation"
             ],
             "properties": {
               "ReadRefundAccount": {
@@ -1608,8 +1608,7 @@
           "VRPType",
           "PSUAuthenticationMethods",
           "MaximumIndividualAmount",
-          "PeriodicLimits",
-          "PSUInteractionTypes"
+          "PeriodicLimits"
         ],
         "properties": {
           "ValidFromDateTime": {
@@ -1831,7 +1830,6 @@
             "required": [
               "ConsentId",
               "PSUAuthenticationMethod",
-              "PSUInteractionType",
               "VRPType",
               "Initiation",
               "Instruction"
@@ -1897,8 +1895,7 @@
               "Status",
               "StatusUpdateDateTime",
               "Initiation",
-              "Instruction",
-              "StatusReason"
+              "Instruction"
             ],
             "description": "`Data.Refund` only included in the response if `Data.ReadRefundAccount` is set to `Yes` in the consent.\n",
             "properties": {
@@ -2057,8 +2054,7 @@
                     "StatusDetail": {
                       "type": "object",
                       "required": [
-                        "Status",
-                        "StatusReason"
+                        "Status"
                       ],
                       "properties": {
                         "LocalInstrument": {
@@ -3123,9 +3119,6 @@
       },
       "OBStatusReason": {
         "type": "object",
-        "required": [
-          "StatusReasonCode"
-        ],
         "properties": {
           "StatusReasonCode": {
             "type": "string",
@@ -3306,15 +3299,6 @@
       "OBRisk1": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "PaymentContextCode",
-          "MerchantCategoryCode",
-          "MerchantCustomerIdentification",
-          "ContractPresentIndicator",
-          "BeneficiaryPrepopulatedIndicator",
-          "PaymentPurposeCode",
-          "CategoryPurposeCode"
-        ],
         "properties": {
           "PaymentContextCode": {
             "type": "string",
