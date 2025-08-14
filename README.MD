@@ -1,4 +1,4 @@
-# cVRP OpenAPI specification - DRAFT
+# cVRP OpenAPI specification
 
 This repository contains the cVRP Swagger file which is based on the [Open Banking VRP API Specification](https://github.com/OpenBankingUK/read-write-api-specs).
 
