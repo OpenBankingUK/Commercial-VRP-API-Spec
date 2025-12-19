@@ -1,0 +1,171 @@
+openapi: 3.0.3
+info:
+  title: Organisations MLA Status API
+  version: "2.1.0"
+  description: API to retrieve all organisations and their MLA status that the client is authorised to access.
+servers:
+  - url: https://matls-dirapi.openbanking.org.uk
+    description: Production
+  - url: https://matls-dirapi.openbankingtest.org.uk
+    description: Sandbox
+paths:
+  /v2.1/organisation/mlastatus:
+    get:
+      summary: Get all organisations and their MLA status that the client is authorised to retrieve
+      description: This will return all organisations and their MLA Status data for the client to store.
+      tags:
+        - Organisations v2.1
+      security:
+        - OAuth2SecurityReadOps:
+            - ASPSPReadAccess
+            - TPPReadAccess
+            - MLAReadAccess
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '200':
+          $ref: '#/components/responses/OrganisationsGetFromMLAStatus200OKResponse'
+        '401':
+          $ref: '#/components/responses/401UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/403ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/404NotFoundResponse'
+        '406':
+          $ref: '#/components/responses/406NotAcceptableResponse'
+        '429':
+          $ref: '#/components/responses/429RateLimitedResponse'
+
+components:
+  parameters:
+    Authorization:
+      in: header
+      name: Authorization
+      required: true
+      description: An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+      schema:
+        type: string
+  securitySchemes:
+    OAuth2SecurityReadOps:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.example.com/oauth/token
+          scopes:
+            MLAReadAccess: Read access to MLA data
+
+  responses:
+    OrganisationsGetFromMLAStatus200OKResponse:
+      description: |
+        List of the organisations and MLA status - Schema in JSON
+      headers:
+        OB-Request-Id:
+          schema:
+            $ref: '#/components/schemas/UniqueRequestIdSchema'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrganisationsGetFromMLAStatus200OKResponseSchema'
+    401UnauthorizedResponse:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseSchema'
+    403ForbiddenResponse:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseSchema'
+    404NotFoundResponse:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseSchema'
+    406NotAcceptableResponse:
+      description: Not Acceptable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseSchema'
+    429RateLimitedResponse:
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseSchema'
+
+  schemas:
+    UniqueRequestIdSchema:
+      type: string
+      description: Unique request identifier for tracing.
+
+    ErrorResponseSchema:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code.
+        message:
+          type: string
+          description: Human-readable error message.
+      required:
+        - code
+        - message
+
+    OrganisationsGetFromMLAStatus200OKResponseSchema:
+      type: object
+      required:
+        - Data
+      properties:
+        Data:
+          type: array
+          items: 
+            $ref: '#/components/schemas/OrganisationMLAStatusSchema'
+    OrganisationMLAStatusSchema:
+      type: object
+      required:
+        - OBOrganisationId
+        - OrganisationCommonName
+        - NCAId
+        - MLAStatus
+        - MLAStatusUpdated
+      properties:
+        OBOrganisationId:
+          type: string
+          description: The organisation ID as defined in the OBL directory.
+          minLength: 1
+          maxLength: 18
+          example: "LTXSJD09IJOUC2BP2B"
+        OrganisationCommonName:
+          type: string
+          description: The common name of the organisation as defined in the OBL directory.
+          minLength: 1
+          maxLength: 255
+          example: "TPP Name"
+        NCAId:
+          type: string
+          maxLength: 255
+          description: NCA ID as per NCA register, comprised of <ISO Code>-<NCA Code>-<FRN>.
+          example: "GB-FCA-12345"
+        MLAStatus:
+          type: string
+          enum:
+            - Active
+            - Suspended
+            - Revoked
+          description: >
+            Indicates organisation status. It is shown only when organisation has one authorisation domain. This field is searchable.
+            * `Active` - participant is active within the MLA scheme
+            * `Suspended` - participant is suspended within the MLA scheme
+            * `Revoked` - participant is no longer in the MLA scheme and can't take actions in ecosystem because of privileges loss
+          example: "Active"
+        MLAStatusUpdated:
+          type: string
+          format: date-time
+          description: Timestamp in the format YYYY-MM-DDTHH:mm:ss.sssZ.
+          example: "2025-12-21T09:30:00+0000"
+
+ 
