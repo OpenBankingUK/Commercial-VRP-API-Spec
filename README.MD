@@ -19,4 +19,4 @@ The `main` branch will always reflect the current release, with both current and
 
 OpenAPI specification for the MLA Particpant API
 
-- [MLA PArticipant API](./MLAPartcipantAPI/mla-participant.yaml)
+- [MLA Participant API](./MLAPartcipantAPI/mla-participant.yaml)
