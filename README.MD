@@ -9,8 +9,14 @@ This repository contains the cVRP Swagger file which is based on the [Open Banki
 
 [CHANGELOG.MD](./OpenAPI/CHANGELOG.MD)
 
-## Releases and change management
+### Releases and change management
 
 Version numbers will align to OBL VRP releases/updates, this ensures clarity on which version of the OBL API specification a release is based on.
 
 The `main` branch will always reflect the current release, with both current and past releases available to download in the [Releases](https://github.com/OpenBankingUK/Commercial-VRP-API-Spec/releases) section.  
+
+## MLA Particpant API
+
+OpenAPI specification for the MLA Particpant API
+
+- [MLA PArticipant API](./MLAPartcipantAPI/mla-participant.yaml)
