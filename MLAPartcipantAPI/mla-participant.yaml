@@ -2,7 +2,8 @@ openapi: 3.0.3
 info:
   title: Organisations MLA Status API
   version: "2.1.0"
-  description: API to retrieve all organisations and their MLA status that the client is authorised to access.
+  description: API to retrieve all organisations and their MLA status that the client is authorised to access. This API requires an OBL Access Token as provided by the OBL Directory API. The `MLAReadAccess` scope is required to use this endpoint. Further details on obtaining this scope can be obtained from UKPI.
+
 servers:
   - url: https://matls-dirapi.openbanking.org.uk
     description: Production
@@ -42,7 +43,7 @@ components:
       in: header
       name: Authorization
       required: true
-      description: An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+      description: An Authorisation Token with the MLAReadAccess scope issued by the OBL Directory API. Further details on obtaining this scope can be obtained from UKPI.
       schema:
         type: string
   securitySchemes:
