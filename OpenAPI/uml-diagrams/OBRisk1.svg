@@ -26,6 +26,13 @@ OBRisk1
 <text x="2em" y="4.3em" fill="darkslateblue">
 <title>Type: string
 Description: Specifies the extended type of account if known. For a full set of values refer to `OBInternalExtendedAccountType1Code` in *OB_Internal_CodeSet* [here](https://github.com/OpenBankingUK/External_Internal_CodeSets)
+
+Only the following values are valid for cVRP - participants &lt;u&gt;__must__&lt;/u&gt; refer to the UKPI OPM for a current list of accepted values:
+* Personal
+* Business
+* Charity
+* Government
+* ISA
 Values:
  - Business
  - BusinessSavingsAccount
@@ -134,6 +141,19 @@ MerchantCustomerIdentification [0..1]
 <title>Type: string
 Description: Specifies the payment context, for a full list of values refer to `OBInternalPaymentContext1Code` in *OB_Internal_CodeSet* [here](https://github.com/OpenBankingUK/External_Internal_CodeSets)
 
+Only the following values are valid for cVRP - participants &lt;u&gt;__must__&lt;/u&gt; refer to the UKPI OPM for a current list of accepted values:
+* TransferToSelf
+* EcommerceMerchantInitiatedPayment
+* FaceToFacePointOfSale
+* TransferToThirdParty
+
+For &lt;u&gt;__non-cVRP__&lt;/u&gt; transactions the following values are deprecated and can only be used to make a payment on an existing v3 consent which used one of the deprecated values and has been migrated to v4. They &lt;u&gt;__must not__&lt;/u&gt; be used in a new consent. They may optionally be returned for a historical payment/consent migrated to v4:&lt;br&gt;
+* BillPayment - @deprecated
+* EcommerceGoods - @deprecated
+* EcommerceServices - @deprecated
+* PartyToParty - @deprecated
+* PispPayee - @deprecated
+* Other - @deprecated
 Values:
  - BillingGoodsAndServicesInAdvance
  - BillingGoodsAndServicesInArrears
@@ -141,6 +161,12 @@ Values:
  - FaceToFacePointOfSale
  - TransferToSelf
  - TransferToThirdParty
+ - BillPayment
+ - EcommerceGoods
+ - EcommerceServices
+ - PartyToParty
+ - PispPayee
+ - Other
 </title>
 PaymentContextCode [0..1]
 </text>
@@ -479,6 +505,7 @@ Values:
  - DEPD
  - RETL
  - DEBT
+ - CRYP
 </title>
 PaymentPurposeCode [0..1]
 </text>
