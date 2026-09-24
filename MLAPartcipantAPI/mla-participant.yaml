@@ -1,31 +1,43 @@
-openapi: 3.0.3
+openapi: 3.0.0
 info:
   title: Organisations MLA Status API
-  version: "2.1.0"
-  description: API to retrieve all organisations and their MLA status that the client is authorised to access. This API requires an OBL Access Token as provided by the OBL Directory API. The `MLAReadAccess` scope is required to use this endpoint. Further details on obtaining this scope can be obtained from UKPI.
+  version: "2.2.0"
+  description: |
+    API to retrieve all organisations and their MLA status that the client is authorised to
+    access.
+
+    This is the participant-facing extract of the MLA Status operation as served by Raidiam
+    Connect. It is the same operation, request shape and response structure as the legacy
+    `/v2.1/organisation/mlastatus` endpoint; what moves is the hostname, the token issuer and
+    the version prefix.
 
 servers:
-  - url: https://matls-dirapi.openbanking.org.uk
+  - url: https://matls-oblapi.directory.openbanking.org.uk
     description: Production
-  - url: https://matls-dirapi.openbankingtest.org.uk
+  - url: https://matls-oblapi.sandbox.directory.openbanking.org.uk
     description: Sandbox
+
 paths:
-  /v2.1/organisation/mlastatus:
+  /v2.2/organisation/mlastatus:
+    parameters:
+      - $ref: '#/components/parameters/FapiInteractionId'
     get:
       summary: Get all organisations and their MLA status that the client is authorised to retrieve
-      description: This will return all organisations and their MLA Status data for the client to store.
+      description: |-
+        Returns all organisations and their Multilateral Agreement (MLA) status data for the client to store.
+
       tags:
-        - Organisations v2.1
+        - MLA Status API
       security:
-        - OAuth2SecurityReadOps:
-            - ASPSPReadAccess
-            - TPPReadAccess
+        - RaidiamAuth:
             - MLAReadAccess
       parameters:
-        - $ref: '#/components/parameters/Authorization'
+        - $ref: '#/components/parameters/IfNoneMatch'
       responses:
         '200':
           $ref: '#/components/responses/OrganisationsGetFromMLAStatus200OKResponse'
+        '304':
+          $ref: '#/components/responses/304NotModifiedResponse'
         '401':
           $ref: '#/components/responses/401UnauthorizedResponse'
         '403':
@@ -39,134 +51,190 @@ paths:
 
 components:
   parameters:
-    Authorization:
+    IfNoneMatch:
+      name: If-None-Match
+      description: The `ETag` from a previous response. When it still matches, the register is answered
+        `304` with no body.
       in: header
-      name: Authorization
-      required: true
-      description: An Authorisation Token with the MLAReadAccess scope issued by the OBL Directory API. Further details on obtaining this scope can be obtained from UKPI.
+      required: false
       schema:
         type: string
+    FapiInteractionId:
+      name: x-fapi-interaction-id
+      description: 'An RFC 4122 UUID used to correlate the request with its response. Optional: supply one to tie
+        the call to your own logs and it is echoed back unchanged; omit it and the server generates one. Either
+        way the response carries the header.'
+      in: header
+      required: false
+      schema:
+        $ref: '#/components/schemas/FapiInteractionIdSchema'
+
   securitySchemes:
-    OAuth2SecurityReadOps:
-      type: oauth2
-      flows:
-        clientCredentials:
-          tokenUrl: https://auth.example.com/oauth/token
-          scopes:
-            MLAReadAccess: Read access to MLA data
+    RaidiamAuth:
+      type: openIdConnect
+      description: |
+        Certificate-bound OAuth 2.0 access tokens issued by Raidiam Auth using the `client_credentials` grant.
+
+        **Discover the token endpoint** from the OpenID provider metadata rather than hardcoding it:
+
+        * Production: `https://auth.directory.openbanking.org.uk/.well-known/openid-configuration`
+        * Sandbox: `https://auth.sandbox.directory.openbanking.org.uk/.well-known/openid-configuration`
+
+        The token request itself is made over mTLS against the `matls-auth.<zone>` host advertised in that metadata.
+
+        All tokens are certificate-bound per RFC 8705: the token's `cnf.x5t#S256` claim carries the SHA-256 thumbprint of the mTLS client certificate presented at the token endpoint, and the presented certificate is compared to that thumbprint on every API call.
+
+        **Scope.** This API uses `MLAReadAccess`. It is a real Raidiam Auth scope, granted through assignment of the *MLA Read* directory role.
+      openIdConnectUrl: https://auth.directory.openbanking.org.uk/.well-known/openid-configuration
 
   responses:
     OrganisationsGetFromMLAStatus200OKResponse:
       description: |
-        List of the organisations and MLA status - Schema in JSON
+        List of the organisations and their MLA status.
       headers:
-        OB-Request-Id:
+        x-fapi-interaction-id:
+          description: The `x-fapi-interaction-id` from the request, echoed unchanged, or a server-generated one
+            if the request did not carry the header.
           schema:
-            $ref: '#/components/schemas/UniqueRequestIdSchema'
+            $ref: '#/components/schemas/FapiInteractionIdSchema'
+        ETag:
+          description: Entity tag for this register. Send it as `If-None-Match` on the next poll.
+          schema:
+            type: string
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/OrganisationsGetFromMLAStatus200OKResponseSchema'
+          example:
+            Data:
+              - OBOrganisationId: 0019A00001bKmTpQAB
+                OrganisationCommonName: Example Bank plc
+                NCAId: GB-FCA-100001
+                MLAStatus: Active
+                MLAStatusUpdated: '2026-08-06T09:20:15+0000'
+              - OBOrganisationId: 0015g00000ZxYwVQAM
+                OrganisationCommonName: Example Payments Ltd
+                NCAId: GB-FCA-100002
+                MLAStatus: Suspended
+                MLAStatusUpdated: '2026-07-02T16:55:43+0000'
+              - OBOrganisationId: 0011t00002LpQrSQAJ
+                OrganisationCommonName: Example Open Finance Ltd
+                NCAId: GB-FCA-100003
+                MLAStatus: Revoked
+                MLAStatusUpdated: '2026-06-01T08:54:39+0000'
+    304NotModifiedResponse:
+      description: Not Modified
+      headers:
+        x-fapi-interaction-id:
+          description: The `x-fapi-interaction-id` from the request, echoed unchanged, or a server-generated one
+            if the request did not carry the header.
+          schema:
+            $ref: '#/components/schemas/FapiInteractionIdSchema'
+        ETag:
+          description: Entity tag of the unchanged register, repeated per RFC 9110.
+          schema:
+            type: string
     401UnauthorizedResponse:
       description: Unauthorized
-      content:
-        application/json:
+      headers:
+        x-fapi-interaction-id:
+          description: The `x-fapi-interaction-id` from the request, echoed unchanged, or a server-generated one
+            if the request did not carry the header.
           schema:
-            $ref: '#/components/schemas/ErrorResponseSchema'
+            $ref: '#/components/schemas/FapiInteractionIdSchema'
     403ForbiddenResponse:
       description: Forbidden
-      content:
-        application/json:
+      headers:
+        x-fapi-interaction-id:
+          description: The `x-fapi-interaction-id` from the request, echoed unchanged, or a server-generated one
+            if the request did not carry the header.
           schema:
-            $ref: '#/components/schemas/ErrorResponseSchema'
+            $ref: '#/components/schemas/FapiInteractionIdSchema'
     404NotFoundResponse:
-      description: Not Found
-      content:
-        application/json:
+      description: Not found
+      headers:
+        x-fapi-interaction-id:
+          description: The `x-fapi-interaction-id` from the request, echoed unchanged, or a server-generated one
+            if the request did not carry the header.
           schema:
-            $ref: '#/components/schemas/ErrorResponseSchema'
+            $ref: '#/components/schemas/FapiInteractionIdSchema'
     406NotAcceptableResponse:
       description: Not Acceptable
-      content:
-        application/json:
+      headers:
+        x-fapi-interaction-id:
+          description: The `x-fapi-interaction-id` from the request, echoed unchanged, or a server-generated one
+            if the request did not carry the header.
           schema:
-            $ref: '#/components/schemas/ErrorResponseSchema'
+            $ref: '#/components/schemas/FapiInteractionIdSchema'
     429RateLimitedResponse:
       description: Too Many Requests
-      content:
-        application/json:
+      headers:
+        x-fapi-interaction-id:
+          description: The `x-fapi-interaction-id` from the request, echoed unchanged, or a server-generated one
+            if the request did not carry the header.
           schema:
-            $ref: '#/components/schemas/ErrorResponseSchema'
+            $ref: '#/components/schemas/FapiInteractionIdSchema'
 
   schemas:
-    UniqueRequestIdSchema:
+    FapiInteractionIdSchema:
       type: string
-      description: Unique request identifier for tracing.
-
-    ErrorResponseSchema:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Machine-readable error code.
-        message:
-          type: string
-          description: Human-readable error message.
-      required:
-        - code
-        - message
+      description: An RFC 4122 UUID used to correlate a request with its response and with server-side logs. Quote
+        it to the Support Desk if you need help with a request that did not behave as you expected.
 
     OrganisationsGetFromMLAStatus200OKResponseSchema:
       type: object
-      required:
-        - Data
+      description: The organisations and their MLA status, carried in a `Data` array.
       properties:
         Data:
           type: array
-          items: 
+          items:
             $ref: '#/components/schemas/OrganisationMLAStatusSchema'
+      required:
+        - Data
+
     OrganisationMLAStatusSchema:
       type: object
-      required:
-        - OBOrganisationId
-        - OrganisationCommonName
-        - NCAId
-        - MLAStatus
-        - MLAStatusUpdated
       properties:
         OBOrganisationId:
           type: string
-          description: The organisation ID as defined in the OBL directory.
           minLength: 1
           maxLength: 18
-          example: "LTXSJD09IJOUC2BP2B"
+          description: The organisation ID as defined in the OBL directory. Identifiers are preserved from the legacy
+            directory.
+          example: '0019A00001bKmTpQAB'
         OrganisationCommonName:
           type: string
-          description: The common name of the organisation as defined in the OBL directory.
           minLength: 1
           maxLength: 255
-          example: "TPP Name"
+          description: The common name of the organisation as defined in the OBL directory.
+          example: 'Example Bank plc'
         NCAId:
           type: string
+          minLength: 1
           maxLength: 255
-          description: NCA ID as per NCA register, comprised of <ISO Code>-<NCA Code>-<FRN>.
-          example: "GB-FCA-12345"
+          description: NCA ID as per the NCA register, comprised of `<ISOCode>-<NCACode>-<FRN>`.
+          example: 'GB-FCA-100001'
         MLAStatus:
           type: string
           enum:
             - Active
             - Suspended
             - Revoked
-          description: >
-            Indicates organisation status. It is shown only when organisation has one authorisation domain. This field is searchable.
+          description: |
+            Indicates the organisation's status within the MLA scheme.
             * `Active` - participant is active within the MLA scheme
             * `Suspended` - participant is suspended within the MLA scheme
-            * `Revoked` - participant is no longer in the MLA scheme and can't take actions in ecosystem because of privileges loss
-          example: "Active"
+            * `Revoked` - participant is no longer in the MLA scheme and cannot take actions in the ecosystem because of privilege loss
+          example: 'Active'
         MLAStatusUpdated:
           type: string
-          format: date-time
-          description: Timestamp in the format YYYY-MM-DDTHH:mm:ss.sssZ.
-          example: "2025-12-21T09:30:00+0000"
-
+          pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{4}$'
+          description: YYYY-MM-DDTHH:mm:ss+0000
+          example: '2026-08-06T09:20:15+0000'
+      required:
+        - OBOrganisationId
+        - OrganisationCommonName
+        - NCAId
+        - MLAStatus
+        - MLAStatusUpdated
  
