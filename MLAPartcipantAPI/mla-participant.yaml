@@ -84,11 +84,7 @@ components:
 
         All tokens are certificate-bound per RFC 8705: the token's `cnf.x5t#S256` claim carries the SHA-256 thumbprint of the mTLS client certificate presented at the token endpoint, and the presented certificate is compared to that thumbprint on every API call.
 
-        **Scopes are Raidiam-native.** Legacy OBL scope names (`ASPSPReadAccess`, `TPPReadAccess`, and so on) are not issued at this token endpoint. `MLAReadAccess` is retained as a real Raidiam Auth scope, granted through assignment of the *MLA Read* directory role, and is the only scope this API uses.
-
-        Scopes used by this API:
-
-        * `MLAReadAccess` - retrieve MLA status; granted via the *MLA Read* directory role
+        **Scope.** This API uses `MLAReadAccess`. It is a real Raidiam Auth scope, granted through assignment of the *MLA Read* directory role.
       openIdConnectUrl: https://auth.directory.openbanking.org.uk/.well-known/openid-configuration
 
   responses:
@@ -205,16 +201,19 @@ components:
           maxLength: 18
           description: The organisation ID as defined in the OBL directory. Identifiers are preserved from the legacy
             directory.
+          example: '0019A00001bKmTpQAB'
         OrganisationCommonName:
           type: string
           minLength: 1
           maxLength: 255
           description: The common name of the organisation as defined in the OBL directory.
+          example: 'Example Bank plc'
         NCAId:
           type: string
           minLength: 1
           maxLength: 255
           description: NCA ID as per the NCA register, comprised of `<ISOCode>-<NCACode>-<FRN>`.
+          example: 'GB-FCA-100001'
         MLAStatus:
           type: string
           enum:
@@ -226,10 +225,12 @@ components:
             * `Active` - participant is active within the MLA scheme
             * `Suspended` - participant is suspended within the MLA scheme
             * `Revoked` - participant is no longer in the MLA scheme and cannot take actions in the ecosystem because of privilege loss
+          example: 'Active'
         MLAStatusUpdated:
           type: string
           pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{4}$'
           description: YYYY-MM-DDTHH:mm:ss+0000
+          example: '2026-08-06T09:20:15+0000'
       required:
         - OBOrganisationId
         - OrganisationCommonName
